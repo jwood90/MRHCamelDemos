@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/cxf        http://camel.apache.org/schema/cxf/camel-cxf.xsd         http://cxf.apache.org/jaxrs        http://cxf.apache.org/schemas/jaxrs.xsd        http://www.springframework.org/schema/jdbc         http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd        http://camel.apache.org/schema/spring        http://camel.apache.org/schema/spring/camel-spring.xsd        http://www.springframework.org/schema/context         http://www.springframework.org/schema/context/spring-context.xsd ">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
+        <property name="brokerURL" value="vm://localhost?broker.persistent=false"/>
+    </bean>
+    <bean class="org.apache.activemq.pool.PooledConnectionFactory"
+        destroy-method="stop" id="pooledConnectionFactory" init-method="start">
+        <property name="maxConnections" value="8"/>
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
+    <bean class="org.springframework.jms.core.JmsTemplate" id="jmsTemplate">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+    </bean>
+    <bean class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close" id="dataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/daily_sales_records"/>
+        <property name="username" value="JWood"/>
+    </bean>
+    <bean class="org.apache.camel.component.sql.SqlComponent" id="sqlComponent">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean class="com.camel.util.SalesRecordMapper" id="salesRecordMapper"/>
+    <bean class="com.camel.activemqdemo.TwoConsumersOnSameTopic" id="twoConsumersOnSameTopic"/>
+    <bean class="com.camel.activemqdemo.TestBean" id="testBean"/>
+    <camelContext id="salesRecordContext" xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="placeholder" location="classpath:sql.properties"/>
+        <routeBuilder ref="twoConsumersOnSameTopic"/>
+    </camelContext>
+</beans>
