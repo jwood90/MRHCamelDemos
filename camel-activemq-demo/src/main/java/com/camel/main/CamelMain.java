@@ -8,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class CamelMain {
 
     public static void main(String[] args) {
-
+    	
         try {
             ApplicationContext springCtx = new ClassPathXmlApplicationContext("database-context.xml");
 

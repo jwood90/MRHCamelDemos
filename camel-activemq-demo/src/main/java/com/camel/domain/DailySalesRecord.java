@@ -6,27 +6,29 @@ package com.camel.domain;
 import org.apache.camel.dataformat.bindy.annotation.CsvRecord;
 import org.apache.camel.dataformat.bindy.annotation.DataField;
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @CsvRecord(separator = ",", crlf = "MAC")
-public class DailySalesRecord implements Serializable {
 
-   //     @NotNull	
-     //   @Size(min = 3, max = 5) 
+public class DailySalesRecord implements Serializable {
+   
 	    @DataField(pos = 1)
+	    @NotNull
 	    private String siteRef;
-	 
-   //     @NotNull
-   //     @Size(min = 3, max = 5) 
+	      
 	    @DataField(pos = 2)
+	    @NotNull
+	    @Size(min = 3, max = 5) 
 	    private String itemCode;
        
-   //     @NotNull
 	    @DataField(pos = 3)
+	    @NotNull
 	    private String quantity;
-	    
-   //     @NotNull
+	           
 	    @DataField(pos = 4)
+	    @NotNull
 	    private String unitPrice;
 	   
 	    public String getSiteRef() {

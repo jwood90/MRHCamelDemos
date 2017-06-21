@@ -26,6 +26,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean class="com.camel.util.SalesRecordMapper" id="salesRecordMapper"/>
+    <bean class="com.camel.util.SalesRecordInvalidMapper" id="salesRecordInvalidMapper"/>
     <bean class="com.camel.activemqdemo.TwoConsumersOnSameTopic" id="twoConsumersOnSameTopic"/>
     <bean class="com.camel.activemqdemo.TestBean" id="testBean"/>
     <camelContext id="salesRecordContext" xmlns="http://camel.apache.org/schema/spring">
